@@ -9,16 +9,20 @@ import (
 )
 
 // WEBSOCKET ENDPOINT
-func ServeWS(w http.ResponseWriter, r *http.Request) {
+func ServeWS(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Host)
 	// NOW we upgrade the connection from http to WS
-	ws, err := websocket.Upgrade(w, r)
+	conn, err := websocket.Upgrade(w, r)
 	if err != nil {
 		log.Fatal(err)
 	}
-	// now we will listen for our messages, and send them to the reader func.
-	go websocket.Writer(ws)
-	websocket.Reader(ws)
+	client := &websocket.Client{
+		Conn: conn,
+		Pool: pool,
+	}
+	// send the client to our pool handler
+	pool.Register <- client
+	client.Read()
 }
 
 /*
@@ -28,8 +32,13 @@ func ServeWS(w http.ResponseWriter, r *http.Request) {
  */
 // ROUTES
 func setupRoutes() {
-	// mapping our "/ws" end point to the ServeWS func.
-	http.HandleFunc("/ws", ServeWS)
+	pool := websocket.NewPool()
+	// create a new goroutine for hitting our route.
+	go pool.Start()
+
+	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		ServeWS(pool, w, r)
+	})
 }
 
 func main() {
