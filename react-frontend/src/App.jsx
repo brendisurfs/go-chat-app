@@ -6,6 +6,7 @@ import { connect, sendMSG } from "../api";
 import Header from "../src/components/Header";
 import ChatHistory from "./components/ChatHistory";
 import ChatInput from "./components/ChatInput.jsx";
+import Message from "./components/Message";
 
 class App extends Component {
   constructor(props) {
