@@ -5,6 +5,7 @@ import { connect, sendMSG } from "../api";
 // individual components
 import Header from "../src/components/Header";
 import ChatHistory from "./components/ChatHistory";
+import ChatInput from "./components/ChatInput.jsx";
 
 class App extends Component {
   constructor(props) {
@@ -24,8 +25,11 @@ class App extends Component {
     });
   }
 
-  send() {
-    sendMSG("hello");
+  send(event) {
+    if (event.keyCode == 13) {
+      sendMSG(event.target.value);
+      event.target.value = "";
+    }
   }
 
   render() {
@@ -33,7 +37,7 @@ class App extends Component {
       <div className="app">
         <Header />
         <ChatHistory chatHistory={this.state.chatHistory} />
-        <button onClick={this.send}>click ya boy</button>
+        <ChatInput send={this.send} />
       </div>
     );
   }

@@ -1,5 +1,9 @@
 let socket = new WebSocket("ws://localhost:8080/ws");
 
+const bodyParser = (msg) => {
+  return JSON.parse(msg.data).body;
+};
+
 let connect = (cb) => {
   console.log("attempting connection");
   socket.onopen = () => {
@@ -7,7 +11,7 @@ let connect = (cb) => {
   };
 
   socket.onmessage = (msg) => {
-    console.log("transmission: ", msg.data);
+    console.log("transmission: ", bodyParser(msg));
     cb(msg);
   };
 
