@@ -1,8 +1,6 @@
-let socket = new WebSocket("ws://localhost:8080/ws");
+// NOTE: need to add a better key for the message
 
-const bodyParser = (msg) => {
-  return JSON.parse(msg.data).body;
-};
+let socket = new WebSocket("ws://localhost:8080/ws");
 
 let connect = (cb) => {
   console.log("attempting connection");
@@ -11,7 +9,8 @@ let connect = (cb) => {
   };
 
   socket.onmessage = (msg) => {
-    console.log("transmission: ", bodyParser(msg));
+    // console.log("transmission: ", bodyParser(msg));
+    console.log(msg);
     cb(msg);
   };
 

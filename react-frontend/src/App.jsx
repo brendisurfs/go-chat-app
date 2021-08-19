@@ -6,7 +6,6 @@ import { connect, sendMSG } from "../api";
 import Header from "../src/components/Header";
 import ChatHistory from "./components/ChatHistory";
 import ChatInput from "./components/ChatInput.jsx";
-import Message from "./components/Message";
 
 class App extends Component {
   constructor(props) {
@@ -18,11 +17,9 @@ class App extends Component {
 
   componentDidMount() {
     connect((msg) => {
-      console.log("new message");
       this.setState((prevState) => ({
         chatHistory: [...this.state.chatHistory, msg],
       }));
-      console.log(this.state);
     });
   }
 

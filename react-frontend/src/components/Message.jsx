@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import { uniqueId } from "lodash";
 export class Message extends Component {
   constructor(props) {
     super(props);
